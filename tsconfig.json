@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@sb": [
+        "services/supabase.js"
+      ]
+    },
+    "typeRoots": [
+      "./types"
+    ]
+  },
+  "extends": "expo/tsconfig.base"
+}

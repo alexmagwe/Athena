@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "userInterfaceStyle": "automatic",
+    "scheme": "athena",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "Athena",
+    "slug": "lifetimeWisdom",
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "package": "com.kepla.athena"
+    },
+    "plugins": [
+      "@react-native-google-signin/google-signin"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6829caae-5bc0-4c74-8697-68407ebd738f"
+      }
+    }
+  }
+}
