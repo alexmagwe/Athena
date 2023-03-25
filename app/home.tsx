@@ -1,5 +1,11 @@
 import { StatusBar } from "expo-status-bar"
-import { SafeAreaView, ScrollView, Text, View } from "react-native"
+import {
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native"
 import { FAB, Header } from "react-native-elements"
 import { AntDesign } from "@expo/vector-icons"
 import { useContext, useState } from "react"
@@ -10,6 +16,7 @@ import { supabase } from "../services/supabase"
 import { AuthContext } from "../context/AuthContext"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Snippet from "./Snippet"
+import { Root } from "react-native-popup-confirm-toast"
 type Corpus = {
   content: string
   created_at: string
@@ -58,38 +65,45 @@ export default function Home({}: HomeProps) {
   }, [])
   return (
     <SafeAreaView className="h-full dark:bg-slate-800 text-slate-100">
-      <Toast />
-      <Header
-        leftComponent={{ icon: "menu", color: "#fff" }}
-        rightComponent={
-          <TouchableOpacity onPress={handleSignOut}>
-            <Text className="text-white">Sign Out</Text>
-          </TouchableOpacity>
-        }
-      />
-      <View className="py-16 px-4 ">
-        {corpus.length == 0 && !loading ? (
-          <View className="">
-            <Text className="dark:text-white text-4xl mb-4">
-              No wisdom leafs
-            </Text>
-          </View>
-        ) : (
-          <ScrollView className="gap-2">
-            {corpus.map((item, i) => (
-              <Snippet id={item.id} content={item.content} />
-            ))}
-          </ScrollView>
-        )}
-        <StatusBar style="auto" />
-      </View>
-      <FAB
-        size="large"
-        color="green"
-        onPress={() => router.push("/add")}
-        icon={<AntDesign name="plus" size={25} color="white" />}
-        placement="right"
-      />
+      <Root>
+        <Toast />
+        <Header
+          leftComponent={{ icon: "menu", color: "#fff" }}
+          rightComponent={
+            <TouchableOpacity onPress={handleSignOut}>
+              <Text className="text-white">Sign Out</Text>
+            </TouchableOpacity>
+          }
+        />
+        <View className="py-16 px-4 ">
+          {corpus.length == 0 && !loading ? (
+            <View className="">
+              <Text className="dark:text-white text-4xl mb-4">
+                No wisdom leafs
+              </Text>
+            </View>
+          ) : (
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={loading} onRefresh={getWisdom} />
+              }
+              className="gap-2"
+            >
+              {corpus.map((item, i) => (
+                <Snippet key={i} id={item.id} content={item.content} />
+              ))}
+            </ScrollView>
+          )}
+          <StatusBar style="auto" />
+        </View>
+        <FAB
+          size="large"
+          color="green"
+          onPress={() => router.push("/add")}
+          icon={<AntDesign name="plus" size={25} color="white" />}
+          placement="right"
+        />
+      </Root>
     </SafeAreaView>
   )
 }
